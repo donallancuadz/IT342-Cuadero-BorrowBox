@@ -1,13 +1,13 @@
 package com.example.demo.controller;
 
-import java.security.Principal;
-
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.example.demo.dto.MeResponse;
 import com.example.demo.entity.User;
 import com.example.demo.repository.UserRepository;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.jwt.Jwt;
 
 @RestController
 @RequestMapping("/api/user")
@@ -20,9 +20,8 @@ public class UserController {
     }
 
     @GetMapping("/me")
-    public ResponseEntity<?> me(Principal principal) {
-        // principal.getName() will be the username from Basic Auth (we’ll set that to email)
-        String email = principal.getName();
+    public ResponseEntity<?> me(@AuthenticationPrincipal Jwt jwt) {
+        String email = jwt.getSubject();
 
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("User not found"));
