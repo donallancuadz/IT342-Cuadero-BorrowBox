@@ -1,10 +1,10 @@
-package com.example.demo.service;
+package edu.cit.cuadero.borrowbox.service;
 
 import org.springframework.security.core.userdetails.*;
 import org.springframework.stereotype.Service;
 
-import com.example.demo.entity.User;
-import com.example.demo.repository.UserRepository;
+import edu.cit.cuadero.borrowbox.entity.User;
+import edu.cit.cuadero.borrowbox.repository.UserRepository;
 
 @Service
 public class CustomUserDetailsService implements UserDetailsService {

@@ -1,4 +1,4 @@
-package com.example.demo.entity;
+package edu.cit.cuadero.borrowbox.entity;
 
 import jakarta.persistence.*;
 

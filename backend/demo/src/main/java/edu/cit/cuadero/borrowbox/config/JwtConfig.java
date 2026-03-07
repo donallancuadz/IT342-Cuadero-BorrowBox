@@ -1,4 +1,4 @@
-package com.example.demo.config;
+package edu.cit.cuadero.borrowbox.config;
 
 import java.nio.charset.StandardCharsets;
 

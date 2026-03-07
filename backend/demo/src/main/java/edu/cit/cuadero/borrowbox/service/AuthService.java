@@ -1,4 +1,4 @@
-package com.example.demo.service;
+package edu.cit.cuadero.borrowbox.service;
 
 
 import java.time.Instant;
@@ -13,9 +13,9 @@ import org.springframework.security.oauth2.jwt.JwtEncoder;
 import org.springframework.security.oauth2.jwt.JwtEncoderParameters;
 import org.springframework.stereotype.Service;
 
-import com.example.demo.dto.RegisterRequest;
-import com.example.demo.entity.User;
-import com.example.demo.repository.UserRepository;
+import edu.cit.cuadero.borrowbox.dto.RegisterRequest;
+import edu.cit.cuadero.borrowbox.entity.User;
+import edu.cit.cuadero.borrowbox.repository.UserRepository;
 
 @Service
 public class AuthService {

@@ -1,4 +1,4 @@
-package com.example.demo.controller;
+package edu.cit.cuadero.borrowbox.controller;
 
 import jakarta.validation.Valid;
 
@@ -6,12 +6,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import com.example.demo.dto.LoginRequest;
-import com.example.demo.dto.LoginResponse;
-import com.example.demo.dto.RegisterRequest;
-import com.example.demo.dto.RegisterResponse;
-import com.example.demo.entity.User;
-import com.example.demo.service.AuthService;
+import edu.cit.cuadero.borrowbox.dto.LoginRequest;
+import edu.cit.cuadero.borrowbox.dto.LoginResponse;
+import edu.cit.cuadero.borrowbox.dto.RegisterRequest;
+import edu.cit.cuadero.borrowbox.dto.RegisterResponse;
+import edu.cit.cuadero.borrowbox.entity.User;
+import edu.cit.cuadero.borrowbox.service.AuthService;
 
 @RestController
 @RequestMapping("/api/auth")

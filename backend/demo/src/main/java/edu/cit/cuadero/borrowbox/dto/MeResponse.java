@@ -1,4 +1,4 @@
-package com.example.demo.dto;
+package edu.cit.cuadero.borrowbox.dto;
 
 public class MeResponse {
     private Long id;

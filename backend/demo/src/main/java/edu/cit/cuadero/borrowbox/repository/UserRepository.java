@@ -1,10 +1,10 @@
-package com.example.demo.repository;
+package edu.cit.cuadero.borrowbox.repository;
 
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.example.demo.entity.User;
+import edu.cit.cuadero.borrowbox.entity.User;
 
 public interface UserRepository extends JpaRepository<User, Long> {
     Optional<User> findByEmail(String email);

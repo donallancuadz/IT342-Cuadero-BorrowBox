@@ -1,11 +1,12 @@
-package com.example.demo.controller;
+package edu.cit.cuadero.borrowbox.controller;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import com.example.demo.dto.MeResponse;
-import com.example.demo.entity.User;
-import com.example.demo.repository.UserRepository;
+import edu.cit.cuadero.borrowbox.dto.MeResponse;
+import edu.cit.cuadero.borrowbox.entity.User;
+import edu.cit.cuadero.borrowbox.repository.UserRepository;
+
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
 
