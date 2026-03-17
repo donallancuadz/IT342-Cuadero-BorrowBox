@@ -81,3 +81,13 @@ export async function getMe() {
 
   return data;
 }
+
+export async function getItems() {
+  const res = await fetch("http://localhost:8080/api/items");
+
+  if (!res.ok) {
+    throw new Error("Failed to fetch items");
+  }
+
+  return res.json();
+}

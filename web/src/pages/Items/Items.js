@@ -1,70 +1,29 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { getItems } from "../../services/api";
 import Navbar from "../../components/navbar";
 import "./Items.css";
-
-const items = [
-  {
-    id: 1,
-    name: "Portable Projector",
-    category: "Electronics",
-    description: "A portable projector suitable for presentations, meetings, classes, and events.",
-    available: true,
-  },
-  {
-    id: 2,
-    name: "Camping tent",
-    category: "Outdoor",
-    description: "A durable camping tent for field activities, outdoor programs, and group use.",
-    available: true,
-  },
-  {
-    id: 3,
-    name: "Power Drill",
-    category: "Tools",
-    description: "A heavy-duty power drill used for repair, installation, and maintenance tasks.",
-    available: false,
-  },
-  {
-    id: 4,
-    name: "DSLR Camera",
-    category: "Photography",
-    description: "A DSLR camera for documentation, media coverage, and photography purposes.",
-    available: true,
-  },
-  {
-    id: 5,
-    name: "Bluetooth Speaker",
-    category: "Audio",
-    description: "A portable Bluetooth speaker useful for events, presentations, and meetings.",
-    available: true,
-  },
-  {
-    id: 6,
-    name: "Ladder (6ft)",
-    category: "Tools",
-    description: "A 6-foot ladder for maintenance, setup, and installation work.",
-    available: false,
-  },
-  {
-    id: 7,
-    name: "Extension Cord",
-    category: "Electrical",
-    description: "An extension cord for powering multiple devices safely in indoor or outdoor use.",
-    available: true,
-  },
-  {
-    id: 8,
-    name: "Air Purifier",
-    category: "Home Appliance",
-    description: "An air purifier designed to improve indoor air quality in shared spaces.",
-    available: true,
-  },
-];
 
 export default function Items() {
   const [search, setSearch] = useState("");
   const [selectedItem, setSelectedItem] = useState(null);
   const [successMsg, setSuccessMsg] = useState("");
+  const [items, setItems] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function loadItems() {
+      try {
+        const data = await getItems();
+        setItems(data);
+      } catch (err) {
+        console.error("Failed to fetch items:", err);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    loadItems();
+  }, []);
 
   const filteredItems = items.filter((item) =>
     item.name.toLowerCase().includes(search.toLowerCase())
@@ -82,6 +41,15 @@ export default function Items() {
 
   function handleBorrowRequest() {
     setSuccessMsg(`Request submitted for "${selectedItem.name}"`);
+  }
+
+  if (loading) {
+    return (
+      <div className="items-page">
+        <Navbar />
+        <p style={{ padding: "20px", fontSize: "18px" }}>Loading items...</p>
+      </div>
+    );
   }
 
   return (
@@ -109,7 +77,17 @@ export default function Items() {
             className="item-card"
             onClick={() => openDetailsModal(item)}
           >
-            <div className="item-photo">Item photo</div>
+            <div className="item-photo">
+              {item.imageUrl ? (
+                <img
+                  src={item.imageUrl}
+                  alt={item.name}
+                  style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                />
+              ) : (
+                "Item photo"
+              )}
+            </div>
 
             <div className="item-info">
               <h3>{item.name}</h3>
@@ -141,7 +119,17 @@ export default function Items() {
       {selectedItem && (
         <div className="modal-overlay">
           <div className="item-details-modal">
-            <div className="item-details-photo">Item photo</div>
+            <div className="item-details-photo">
+              {selectedItem.imageUrl ? (
+                <img
+                  src={selectedItem.imageUrl}
+                  alt={selectedItem.name}
+                  style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                />
+              ) : (
+                "Item photo"
+              )}
+            </div>
 
             <div className="item-details-info">
               <h2>{selectedItem.name}</h2>
