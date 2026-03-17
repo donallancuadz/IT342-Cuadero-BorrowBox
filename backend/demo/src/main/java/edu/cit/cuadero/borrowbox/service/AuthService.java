@@ -44,18 +44,33 @@ public class AuthService {
     // REGISTER
     // =========================
     public User register(RegisterRequest req) {
+
         String email = req.getEmail().trim().toLowerCase();
 
+        // 1. Check if email already exists
         if (userRepository.existsByEmail(email)) {
             throw new IllegalArgumentException("Email is already registered");
         }
 
+        // 2. Check password match
+        if (!req.getPassword().equals(req.getConfirmPassword())) {
+            throw new IllegalArgumentException("Passwords do not match");
+        }
+
+        // 3. Validate Student ID format (XX-XXXX-XXX)
+        if (!req.getStudentId().matches("^[0-9]{2}-[0-9]{4}-[0-9]{3}$")) {
+            throw new IllegalArgumentException("Invalid Student ID format (XX-XXXX-XXX)");
+        }
+
+        // 4. Hash password
         String hashedPassword = passwordEncoder.encode(req.getPassword());
 
+        // 5. Create user
         User user = new User();
         user.setFullName(req.getFullName().trim());
         user.setEmail(email);
         user.setPassword(hashedPassword);
+        user.setStudentId(req.getStudentId());
 
         return userRepository.save(user);
     }
