@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { registerUser } from "../services/api";
+import { registerUser } from "../../services/api";
 
 export default function Register() {
   const [fullName, setFullName] = useState("");
