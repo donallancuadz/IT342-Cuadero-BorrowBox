@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getItems } from "../../services/api";
+import { getItems, createBorrowRequest } from "../../services/api";
 import Navbar from "../../components/navbar";
 import "./Items.css";
 
@@ -39,9 +39,14 @@ export default function Items() {
     setSuccessMsg("");
   }
 
-  function handleBorrowRequest() {
-    setSuccessMsg(`Request submitted for "${selectedItem.name}"`);
+  async function handleBorrowRequest() {
+  try {
+    const result = await createBorrowRequest(selectedItem.id);
+    setSuccessMsg(`Request submitted for "${result.itemName}"`);
+  } catch (err) {
+    setSuccessMsg(err.message || "Failed to submit request");
   }
+}
 
   if (loading) {
     return (
