@@ -30,6 +30,22 @@ The system allows users to securely register, log in, view their profile, and lo
 
 ---
 
+## Local Backend Configuration
+
+Before starting the Spring Boot backend, set these environment variables for your local machine:
+
+```powershell
+$env:DB_URL="jdbc:mysql://localhost:3306/borrowbox_db?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true&useUnicode=true&characterEncoding=UTF-8"
+$env:DB_USERNAME="root"
+$env:DB_PASSWORD="your_mysql_password"
+$env:JWT_SECRET="use_a_long_random_secret_at_least_32_characters"
+$env:APP_ADMIN_EMAIL="your_admin_email@example.com"
+```
+
+`APP_ADMIN_EMAIL`, `JWT_ISSUER`, and `JWT_EXP_MINUTES` are optional. If no admin exists yet, the next successful login is promoted to `ADMIN`. If `APP_ADMIN_EMAIL` is set, that user is promoted to `ADMIN` when they log in.
+
+---
+
 ## Implemented Features
 
 ### Backend
