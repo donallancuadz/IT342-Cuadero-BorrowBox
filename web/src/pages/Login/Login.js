@@ -1,9 +1,11 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { loginUser } from "../../services/api";
+import "../Auth.css";
 
 export default function Login() {
   const navigate = useNavigate();
+  const location = useLocation();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -16,7 +18,7 @@ export default function Login() {
     setLoading(true);
 
     try {
-      await loginUser({ email, password }); // ✅ saves token to localStorage
+      await loginUser({ email, password });
       navigate("/dashboard");
     } catch (err) {
       setMsg(err.message || "Login failed");
@@ -26,47 +28,55 @@ export default function Login() {
   }
 
   return (
-    <div style={{ maxWidth: 420, margin: "40px auto" }}>
-      <h2>Login</h2>
+    <main className="auth-page">
+      <section className="auth-card">
+        <div className="auth-brand">
+          <div className="auth-logo-box">B</div>
+          <h1>BorrowBox</h1>
+          <p>Sign in to your account</p>
+        </div>
 
-      {msg && (
-        <p style={{ color: "crimson", marginTop: 10 }}>
-          {msg}
+        {location.state?.registered && (
+          <div className="auth-alert success">Account created. Please log in.</div>
+        )}
+
+        {msg && <div className="auth-alert error">{msg}</div>}
+
+        <form className="auth-form" onSubmit={handleSubmit}>
+          <label>
+            Email address
+            <input
+              type="email"
+              placeholder="you@example.com"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+          </label>
+
+          <label>
+            Password
+            <input
+              type="password"
+              placeholder="Enter your password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+          </label>
+
+          <button className="auth-submit" type="submit" disabled={loading}>
+            {loading ? "Logging in..." : "Login"}
+          </button>
+        </form>
+
+        <p className="auth-switch">
+          Don&apos;t have an account?{" "}
+          <button type="button" onClick={() => navigate("/register")}>
+            Register here
+          </button>
         </p>
-      )}
-
-      <form onSubmit={handleSubmit} style={{ display: "grid", gap: 10, marginTop: 12 }}>
-        <input
-          type="email"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-        />
-
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-        />
-
-        <button type="submit" disabled={loading}>
-          {loading ? "Logging in..." : "Login"}
-        </button>
-      </form>
-
-      <p style={{ marginTop: 12 }}>
-        No account?{" "}
-        <button
-          type="button"
-          onClick={() => navigate("/register")}
-          style={{ textDecoration: "underline", background: "none", border: "none", padding: 0, cursor: "pointer" }}
-        >
-          Register
-        </button>
-      </p>
-    </div>
+      </section>
+    </main>
   );
 }

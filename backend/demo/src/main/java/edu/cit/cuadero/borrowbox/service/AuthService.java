@@ -30,6 +30,9 @@ public class AuthService {
     @Value("${app.jwt.exp-minutes}")
     private long expMinutes;
 
+    @Value("${app.admin.email:}")
+    private String adminEmail;
+
     public AuthService(
             UserRepository userRepository,
             PasswordEncoder passwordEncoder,
@@ -88,6 +91,14 @@ public class AuthService {
             throw new IllegalArgumentException("Invalid email or password");
         }
 
+        boolean isConfiguredAdmin = !adminEmail.isBlank() && cleanEmail.equals(adminEmail.trim().toLowerCase());
+        boolean hasNoAdmins = userRepository.countByRole("ADMIN") == 0;
+
+        if ((isConfiguredAdmin || hasNoAdmins) && !"ADMIN".equals(user.getRole())) {
+            user.setRole("ADMIN");
+            user = userRepository.save(user);
+        }
+
         return user;
     }
 
@@ -105,6 +116,7 @@ public class AuthService {
                 .subject(user.getEmail())      // subject = email
                 .claim("uid", user.getId())
                 .claim("name", user.getFullName())
+                .claim("role", user.getRole())
                 .build();
 
         return jwtEncoder.encode(

@@ -54,7 +54,8 @@ public class AuthController {
                     token,
                     user.getId(),
                     user.getFullName(),
-                    user.getEmail()
+                    user.getEmail(),
+                    user.getRole()
             );
 
             return ResponseEntity.ok(res);

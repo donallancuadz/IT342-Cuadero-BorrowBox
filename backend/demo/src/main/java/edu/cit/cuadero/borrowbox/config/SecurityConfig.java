@@ -30,10 +30,28 @@ public class SecurityConfig {
     }
 
     /**
-     * Chain 2: Protected API endpoints (JWT required)
+     * Chain 2: Public item endpoints (NO JWT required here)
      */
     @Bean
     @Order(2)
+    SecurityFilterChain itemsChain(HttpSecurity http) throws Exception {
+        http
+            .securityMatcher("/api/items/**")
+            .cors(Customizer.withDefaults())
+            .csrf(csrf -> csrf.disable())
+            .authorizeHttpRequests(auth -> auth
+                .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+                .anyRequest().permitAll()
+            );
+
+        return http.build();
+    }
+
+    /**
+     * Chain 3: Protected API endpoints (JWT required)
+     */
+    @Bean
+    @Order(3)
     SecurityFilterChain apiChain(HttpSecurity http) throws Exception {
         http
             .securityMatcher("/api/**")

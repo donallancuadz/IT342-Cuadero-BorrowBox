@@ -1,71 +1,121 @@
-import React, { useState } from "react";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { registerUser } from "../../services/api";
+import "../Auth.css";
 
 export default function Register() {
+  const navigate = useNavigate();
+
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
+  const [studentId, setStudentId] = useState("");
   const [password, setPassword] = useState("");
-  const [msg, setMsg] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [err, setErr] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  const onSubmit = async (e) => {
+  async function handleSubmit(e) {
     e.preventDefault();
-    setMsg("");
     setErr("");
 
-    try {
-      const data = await registerUser({ fullName, email, password });
-      setMsg(`Registered: ${data.email}`);
-      setFullName("");
-      setEmail("");
-      setPassword("");
-    } catch (e2) {
-      setErr(e2.message);
+    if (password !== confirmPassword) {
+      setErr("Passwords do not match");
+      return;
     }
-  };
+
+    setLoading(true);
+    try {
+      await registerUser({ fullName, email, password, confirmPassword, studentId });
+      navigate("/login", { replace: true, state: { registered: true } });
+    } catch (e2) {
+      setErr(e2.message || "Registration failed");
+    } finally {
+      setLoading(false);
+    }
+  }
 
   return (
-    <div style={{ maxWidth: 420, margin: "40px auto" }}>
-      <h2>Register</h2>
-
-      <form onSubmit={onSubmit}>
-        <div style={{ marginBottom: 10 }}>
-          <label>Full Name</label>
-          <input
-            value={fullName}
-            onChange={(e) => setFullName(e.target.value)}
-            required
-            style={{ width: "100%" }}
-          />
+    <main className="auth-page">
+      <section className="auth-card register">
+        <div className="auth-brand">
+          <div className="auth-logo-box">B</div>
+          <h1>BorrowBox</h1>
+          <p>Create your account</p>
         </div>
 
-        <div style={{ marginBottom: 10 }}>
-          <label>Email</label>
-          <input
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            type="email"
-            required
-            style={{ width: "100%" }}
-          />
-        </div>
+        {err && <div className="auth-alert error">{err}</div>}
 
-        <div style={{ marginBottom: 10 }}>
-          <label>Password</label>
-          <input
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            type="password"
-            required
-            style={{ width: "100%" }}
-          />
-        </div>
+        <form className="auth-form" onSubmit={handleSubmit}>
+          <label>
+            Full name
+            <input
+              type="text"
+              placeholder="Juan Dela Cruz"
+              value={fullName}
+              onChange={(e) => setFullName(e.target.value)}
+              required
+            />
+          </label>
 
-        <button type="submit">Create Account</button>
-      </form>
+          <label>
+            Email address
+            <input
+              type="email"
+              placeholder="you@example.com"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+          </label>
 
-      {msg && <p style={{ marginTop: 12 }}>{msg}</p>}
-      {err && <p style={{ marginTop: 12, color: "crimson" }}>{err}</p>}
-    </div>
+          <label>
+            Student ID
+            <input
+              type="text"
+              placeholder="12-3456-789"
+              pattern="[0-9]{2}-[0-9]{4}-[0-9]{3}"
+              value={studentId}
+              onChange={(e) => setStudentId(e.target.value)}
+              required
+            />
+          </label>
+
+          <label>
+            Password
+            <input
+              type="password"
+              placeholder="At least 6 characters"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              minLength="6"
+              required
+            />
+          </label>
+
+          <label>
+            Confirm password
+            <input
+              type="password"
+              placeholder="Re-enter your password"
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              minLength="6"
+              required
+            />
+          </label>
+
+          <button className="auth-submit" type="submit" disabled={loading}>
+            {loading ? "Creating account..." : "Create Account"}
+          </button>
+        </form>
+
+        <p className="auth-switch">
+          Already have an account?{" "}
+          <button type="button" onClick={() => navigate("/login")}>
+            Log in here
+          </button>
+        </p>
+      </section>
+    </main>
   );
 }
