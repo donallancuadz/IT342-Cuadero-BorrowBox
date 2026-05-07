@@ -18,8 +18,21 @@
         android:layout_height="wrap_content"/>
 
     <EditText
+        android:id="@+id/etStudentId"
+        android:hint="Student ID (XX-XXXX-XXX)"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <EditText
         android:id="@+id/etPassword"
         android:hint="Password"
+        android:inputType="textPassword"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <EditText
+        android:id="@+id/etConfirmPassword"
+        android:hint="Confirm Password"
         android:inputType="textPassword"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>

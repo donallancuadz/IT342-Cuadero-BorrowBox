@@ -20,15 +20,27 @@ class RegisterActivity : AppCompatActivity() {
 
         val fullName = findViewById<EditText>(R.id.etFullName)
         val email = findViewById<EditText>(R.id.etEmail)
+        val studentId = findViewById<EditText>(R.id.etStudentId)
         val password = findViewById<EditText>(R.id.etPassword)
+        val confirmPassword = findViewById<EditText>(R.id.etConfirmPassword)
         val btnRegister = findViewById<Button>(R.id.btnRegister)
 
         btnRegister.setOnClickListener {
+            if (password.text.toString() != confirmPassword.text.toString()) {
+                Toast.makeText(
+                    this@RegisterActivity,
+                    "Passwords do not match",
+                    Toast.LENGTH_LONG
+                ).show()
+                return@setOnClickListener
+            }
 
             val request = RegisterRequest(
                 fullName.text.toString(),
                 email.text.toString(),
-                password.text.toString()
+                password.text.toString(),
+                confirmPassword.text.toString(),
+                studentId.text.toString()
             )
 
             ApiClient.apiService.register(request)
