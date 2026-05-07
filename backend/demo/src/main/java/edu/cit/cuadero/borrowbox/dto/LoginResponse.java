@@ -6,15 +6,17 @@ public class LoginResponse {
     private Long id;
     private String fullName;
     private String email;
+    private String role;
 
     public LoginResponse() {}
 
-    public LoginResponse(String token, Long id, String fullName, String email) {
+    public LoginResponse(String token, Long id, String fullName, String email, String role) {
         this.token = token;
         this.tokenType = "Bearer";
         this.id = id;
         this.fullName = fullName;
         this.email = email;
+        this.role = role;
     }
 
     public String getToken() { return token; }
@@ -31,4 +33,7 @@ public class LoginResponse {
 
     public String getEmail() { return email; }
     public void setEmail(String email) { this.email = email; }
+
+    public String getRole() { return role; }
+    public void setRole(String role) { this.role = role; }
 }
