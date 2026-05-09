@@ -4,63 +4,108 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import edu.cit.cuadero.borrowbox.dto.DashboardResponse;
 import edu.cit.cuadero.borrowbox.dto.MeResponse;
 import edu.cit.cuadero.borrowbox.dto.UpdateProfileRequest;
 import edu.cit.cuadero.borrowbox.entity.User;
+import edu.cit.cuadero.borrowbox.repository.BorrowRequestRepository;
+import edu.cit.cuadero.borrowbox.repository.ItemRepository;
 import edu.cit.cuadero.borrowbox.repository.UserRepository;
 
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
+
+import java.time.format.DateTimeFormatter;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/user")
 public class UserController {
 
     private final UserRepository userRepository;
+    private final BorrowRequestRepository borrowRequestRepository;
+    private final ItemRepository itemRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public UserController(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+    public UserController(UserRepository userRepository,
+                          BorrowRequestRepository borrowRequestRepository,
+                          ItemRepository itemRepository,
+                          PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
+        this.borrowRequestRepository = borrowRequestRepository;
+        this.itemRepository = itemRepository;
         this.passwordEncoder = passwordEncoder;
     }
 
     @GetMapping("/me")
     public ResponseEntity<?> me(@AuthenticationPrincipal Jwt jwt) {
         String email = jwt.getSubject();
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        return ResponseEntity.ok(new MeResponse(
+    user.getId(),
+    user.getFullName(),
+    user.getEmail(),
+    user.getRole()));
+    }
 
+    @GetMapping("/dashboard")
+    public ResponseEntity<?> dashboard(@AuthenticationPrincipal Jwt jwt) {
+        String email = jwt.getSubject();
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
-        return ResponseEntity.ok(new MeResponse(user.getId(), user.getFullName(), user.getEmail(), user.getRole()));
+        long activeBorrows   = borrowRequestRepository.countByUserAndStatus(user, "ACTIVE");
+        long pendingRequests = borrowRequestRepository.countByUserAndStatus(user, "PENDING");
+        long returnedItems   = borrowRequestRepository.countByUserAndStatus(user, "RETURNED");
+        long availableItems  = itemRepository.countByAvailable(true); // uses YOUR existing method
+
+        DateTimeFormatter fmt = DateTimeFormatter.ofPattern("MMM d");
+        List<DashboardResponse.RecentRequestItem> recent =
+            borrowRequestRepository.findTop5ByUserOrderByRequestDateDesc(user)
+                .stream()
+                .map(r -> new DashboardResponse.RecentRequestItem(
+                        r.getItem().getName(),
+                        r.getRequestDate().format(fmt),
+                        r.getStatus()))
+                .collect(Collectors.toList());
+
+        return ResponseEntity.ok(
+                new DashboardResponse(activeBorrows, pendingRequests, returnedItems, availableItems, recent));
     }
 
     @PutMapping("/me")
     public ResponseEntity<?> updateMe(
             @AuthenticationPrincipal Jwt jwt,
-            @RequestBody UpdateProfileRequest req
-    ) {
-        String email = jwt.getSubject();
+            @RequestBody UpdateProfileRequest request) {
 
+        String email = jwt.getSubject();
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
-        if (req.getFullName() != null && !req.getFullName().trim().isEmpty()) {
-            user.setFullName(req.getFullName().trim());
+        if (request.getFullName() != null && !request.getFullName().isBlank()) {
+            user.setFullName(request.getFullName().trim());
         }
 
-        if (req.getNewPassword() != null && !req.getNewPassword().isBlank()) {
-            if (req.getCurrentPassword() == null || req.getCurrentPassword().isBlank()) {
-                return ResponseEntity.badRequest().body("Current password is required");
+        if (request.getNewPassword() != null && !request.getNewPassword().isBlank()) {
+            if (request.getCurrentPassword() == null || request.getCurrentPassword().isBlank()) {
+                return ResponseEntity.badRequest()
+                        .body(Map.of("message", "Current password is required to set a new password."));
             }
-
-            if (!passwordEncoder.matches(req.getCurrentPassword(), user.getPassword())) {
-                return ResponseEntity.badRequest().body("Current password is incorrect");
+            if (!passwordEncoder.matches(request.getCurrentPassword(), user.getPassword())) {
+                return ResponseEntity.badRequest()
+                        .body(Map.of("message", "Current password is incorrect."));
             }
-
-            user.setPassword(passwordEncoder.encode(req.getNewPassword()));
+            user.setPassword(passwordEncoder.encode(request.getNewPassword()));
         }
 
-        User updated = userRepository.save(user);
-        return ResponseEntity.ok(new MeResponse(updated.getId(), updated.getFullName(), updated.getEmail(), updated.getRole()));
+        userRepository.save(user);
+        return ResponseEntity.ok(new MeResponse(
+    user.getId(),
+    user.getFullName(),
+    user.getEmail(),
+    user.getRole()));
     }
 }
