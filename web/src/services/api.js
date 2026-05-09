@@ -26,14 +26,9 @@ export async function registerUser({ fullName, email, password, confirmPassword,
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ fullName, email, password, confirmPassword, studentId }),
   });
-
   const text = await res.text();
   const data = parseJsonOrText(text);
-
-  if (!res.ok) {
-    throw new Error(typeof data === "string" ? data : "Register failed");
-  }
-
+  if (!res.ok) throw new Error(typeof data === "string" ? data : "Register failed");
   return data;
 }
 
@@ -43,20 +38,11 @@ export async function loginUser({ email, password }) {
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ email, password }),
   });
-
   const text = await res.text();
   const data = parseJsonOrText(text);
-
-  if (!res.ok) {
-    throw new Error(typeof data === "string" ? data : "Login failed");
-  }
-
-  // ✅ Save JWT
+  if (!res.ok) throw new Error(typeof data === "string" ? data : "Login failed");
   localStorage.setItem("token", data.token);
-  if (data.role) {
-    localStorage.setItem("role", data.role);
-  }
-
+  if (data.role) localStorage.setItem("role", data.role);
   return data;
 }
 
@@ -66,92 +52,59 @@ export function logoutUser() {
 }
 
 // ----------------------
-// Protected API
+// User API
 // ----------------------
 export async function getMe() {
   const res = await fetch(`${API_BASE}/api/user/me`, {
-    method: "GET",
-    headers: {
-      ...getAuthHeader(),
-    },
+    headers: { ...getAuthHeader() },
   });
+  return readApiResponse(res, "Unauthorized");
+}
 
-  const text = await res.text();
-  const data = parseJsonOrText(text);
-
-  if (!res.ok) {
-    throw new Error(typeof data === "string" ? data : "Unauthorized");
-  }
-
-  return data;
+export async function getDashboard() {
+  const res = await fetch(`${API_BASE}/api/user/dashboard`, {
+    headers: { ...getAuthHeader() },
+  });
+  return readApiResponse(res, "Failed to load dashboard");
 }
 
 export async function updateProfile({ fullName, currentPassword, newPassword }) {
   const res = await fetch(`${API_BASE}/api/user/me`, {
     method: "PUT",
-    headers: {
-      "Content-Type": "application/json",
-      ...getAuthHeader(),
-    },
+    headers: { "Content-Type": "application/json", ...getAuthHeader() },
     body: JSON.stringify({ fullName, currentPassword, newPassword }),
   });
-
-  const text = await res.text();
-  const data = parseJsonOrText(text);
-
-  if (!res.ok) {
-    throw new Error(typeof data === "string" ? data : data.message || "Update failed");
-  }
-
-  return data;
+  return readApiResponse(res, "Update failed");
 }
 
+// ----------------------
+// Items & Requests
+// ----------------------
 export async function getItems() {
-  const res = await fetch("http://localhost:8080/api/items");
-
-  if (!res.ok) {
-    throw new Error("Failed to fetch items");
-  }
-
+  const res = await fetch(`${API_BASE}/api/items`);
+  if (!res.ok) throw new Error("Failed to fetch items");
   return res.json();
 }
 
 export async function createBorrowRequest(itemId) {
-  const token = localStorage.getItem("token");
-
-  const res = await fetch("http://localhost:8080/api/requests", {
+  const res = await fetch(`${API_BASE}/api/requests`, {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
-    },
+    headers: { "Content-Type": "application/json", ...getAuthHeader() },
     body: JSON.stringify({ itemId }),
   });
-
-  if (!res.ok) {
-    const text = await res.text();
-    throw new Error(text || "Failed to create borrow request");
-  }
-
-  return res.json();
+  return readApiResponse(res, "Failed to create borrow request");
 }
 
 export async function getMyRequests() {
-  const token = localStorage.getItem("token");
-
-  const res = await fetch("http://localhost:8080/api/requests/my", {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
+  const res = await fetch(`${API_BASE}/api/requests/my`, {
+    headers: { ...getAuthHeader() },
   });
-
-  if (!res.ok) {
-    throw new Error("Failed to fetch requests");
-  }
-
-  return res.json();
+  return readApiResponse(res, "Failed to fetch requests");
 }
 
+// ----------------------
+// Admin API
+// ----------------------
 export async function getAdminStats() {
   const res = await fetch(`${API_BASE}/api/admin/stats`, {
     headers: { ...getAuthHeader() },
@@ -224,11 +177,12 @@ export async function updateAdminUserRole(id, role) {
   return readApiResponse(res, "Failed to update role");
 }
 
+// ----------------------
+// Shared helper
+// ----------------------
 async function readApiResponse(res, fallback) {
   const text = await res.text();
   const data = text ? parseJsonOrText(text) : null;
-  if (!res.ok) {
-    throw new Error(typeof data === "string" ? data : fallback);
-  }
+  if (!res.ok) throw new Error(typeof data === "string" ? data : fallback);
   return data;
 }

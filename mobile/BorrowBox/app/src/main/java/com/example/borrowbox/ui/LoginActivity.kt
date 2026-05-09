@@ -2,9 +2,10 @@ package com.example.borrowbox.ui
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import android.widget.Button
 import android.widget.EditText
-import android.widget.Toast
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.example.borrowbox.R
 import com.example.borrowbox.api.ApiClient
@@ -21,59 +22,69 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
-        val email = findViewById<EditText>(R.id.etEmail)
-        val password = findViewById<EditText>(R.id.etPassword)
-        val btnLogin = findViewById<Button>(R.id.btnLogin)
+        val etEmail    = findViewById<EditText>(R.id.etEmail)
+        val etPassword = findViewById<EditText>(R.id.etPassword)
+        val btnLogin   = findViewById<Button>(R.id.btnLogin)
+        val tvError    = findViewById<TextView>(R.id.tvError)
+        val tvRegister = findViewById<TextView>(R.id.tvRegister)
 
         val tokenManager = TokenManager(this)
 
+        // If already logged in, skip to dashboard
+        if (tokenManager.getToken() != null) {
+            goToDashboard()
+            return
+        }
+
+        tvRegister.setOnClickListener {
+            startActivity(Intent(this, RegisterActivity::class.java))
+        }
+
         btnLogin.setOnClickListener {
+            val email    = etEmail.text.toString().trim()
+            val password = etPassword.text.toString()
 
-            val request = LoginRequest(
-                email.text.toString(),
-                password.text.toString()
-            )
+            tvError.visibility = View.GONE
 
-            ApiClient.apiService.login(request)
+            if (email.isEmpty() || password.isEmpty()) {
+                showError(tvError, "Please fill in all fields.")
+                return@setOnClickListener
+            }
+
+            btnLogin.isEnabled = false
+            btnLogin.text = "Signing in..."
+
+            ApiClient.apiService.login(LoginRequest(email, password))
                 .enqueue(object : Callback<LoginResponse> {
 
-                    override fun onResponse(
-                        call: Call<LoginResponse>,
-                        response: Response<LoginResponse>
-                    ) {
+                    override fun onResponse(call: Call<LoginResponse>, response: Response<LoginResponse>) {
+                        btnLogin.isEnabled = true
+                        btnLogin.text = "LOGIN"
+
                         if (response.isSuccessful && response.body() != null) {
-                            val loginResponse = response.body()!!
-
-                            tokenManager.saveToken(loginResponse.token)
-
-                            Toast.makeText(
-                                this@LoginActivity,
-                                "Login successful",
-                                Toast.LENGTH_SHORT
-                            ).show()
-
-                            startActivity(
-                                Intent(this@LoginActivity, DashboardActivity::class.java)
-                            )
-                            finish()
-
+                            tokenManager.saveToken(response.body()!!.token)
+                            goToDashboard()
                         } else {
-                            Toast.makeText(
-                                this@LoginActivity,
-                                "Login failed: ${response.code()}",
-                                Toast.LENGTH_LONG
-                            ).show()
+                            showError(tvError, "Invalid email or password.")
                         }
                     }
 
                     override fun onFailure(call: Call<LoginResponse>, t: Throwable) {
-                        Toast.makeText(
-                            this@LoginActivity,
-                            "Error: ${t.message}",
-                            Toast.LENGTH_LONG
-                        ).show()
+                        btnLogin.isEnabled = true
+                        btnLogin.text = "LOGIN"
+                        showError(tvError, "Connection error. Is the server running?")
                     }
                 })
         }
+    }
+
+    private fun showError(tv: TextView, message: String) {
+        tv.text = message
+        tv.visibility = View.VISIBLE
+    }
+
+    private fun goToDashboard() {
+        startActivity(Intent(this, DashboardActivity::class.java))
+        finish()
     }
 }
