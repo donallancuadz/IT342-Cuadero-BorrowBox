@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { decideAdminRequest, getAdminRequests } from "../../services/api";
+import { decideAdminRequest, getAdminRequests } from "../../shared/api";
 import AdminNav from "./AdminNav";
 import "./Admin.css";
 

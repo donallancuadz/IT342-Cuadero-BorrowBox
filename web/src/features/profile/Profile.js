@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import Navbar from "../../components/navbar";
-import { getMe, logoutUser, updateProfile } from "../../services/api";
+import Navbar from "../../shared/components/Navbar";
+import { getMe, logoutUser, updateProfile } from "../../shared/api";
 import "./Profile.css";
 
 export default function Profile() {

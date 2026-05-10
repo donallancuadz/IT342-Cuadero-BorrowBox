@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getAdminUsers, updateAdminUserRole } from "../../services/api";
+import { getAdminUsers, updateAdminUserRole } from "../../shared/api";
 import AdminNav from "./AdminNav";
 import "./Admin.css";
 

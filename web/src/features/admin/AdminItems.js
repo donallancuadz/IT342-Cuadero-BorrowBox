@@ -4,7 +4,7 @@ import {
   deleteAdminItem,
   getAdminItems,
   updateAdminItem,
-} from "../../services/api";
+} from "../../shared/api";
 import AdminNav from "./AdminNav";
 import "./Admin.css";
 

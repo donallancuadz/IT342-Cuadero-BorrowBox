@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { getItems, createBorrowRequest } from "../../services/api";
-import Navbar from "../../components/navbar";
+import { getItems, createBorrowRequest } from "../../shared/api";
+import Navbar from "../../shared/components/Navbar";
 import "./Items.css";
 
 export default function Items() {

@@ -70,10 +70,17 @@ class RegisterActivity : AppCompatActivity() {
                     btnRegister.text = "CREATE ACCOUNT"
 
                     if (response.isSuccessful) {
-                        startActivity(Intent(this@RegisterActivity, LoginActivity::class.java).apply {
-                            putExtra("registered", true)
-                        })
-                        finish()
+                        android.app.AlertDialog.Builder(this@RegisterActivity)
+                            .setTitle("Registration Successful!")
+                            .setMessage("Your account has been created. Please log in to continue.")
+                            .setPositiveButton("Go to Login") { _, _ ->
+                                startActivity(Intent(this@RegisterActivity, LoginActivity::class.java).apply {
+                                    putExtra("registered", true)
+                                })
+                                finish()
+                            }
+                            .setCancelable(false)
+                            .show()
                     } else {
                         showError(tvError, "Registration failed. Email may already be in use.")
                     }

@@ -1,5 +1,5 @@
 import { useLocation, useNavigate } from "react-router-dom";
-import { logoutUser } from "../../services/api";
+import { logoutUser } from "../../shared/api";
 
 export default function AdminNav() {
   const navigate = useNavigate();

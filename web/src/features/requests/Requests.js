@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import Navbar from "../../components/navbar";
-import { getMyRequests } from "../../services/api";
+import Navbar from "../../shared/components/Navbar";
+import { getMyRequests } from "../../shared/api";
 import "./Requests.css";
 
 export default function Requests() {

@@ -1,12 +1,10 @@
 import { useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
-import { loginUser } from "../../services/api";
-import "../Auth.css";
+import { useNavigate } from "react-router-dom";
+import { loginUser, logoutUser } from "../../shared/api";
+import "./Auth.css";
 
-export default function Login() {
+export default function AdminLogin() {
   const navigate = useNavigate();
-  const location = useLocation();
-
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [msg, setMsg] = useState("");
@@ -18,36 +16,37 @@ export default function Login() {
     setLoading(true);
 
     try {
-      await loginUser({ email, password });
-      navigate("/dashboard");
+      const data = await loginUser({ email, password });
+      if (data.role !== "ADMIN") {
+        logoutUser();
+        setMsg("This account does not have admin access.");
+        return;
+      }
+      navigate("/admin");
     } catch (err) {
-      setMsg(err.message || "Login failed");
+      setMsg(err.message || "Admin login failed");
     } finally {
       setLoading(false);
     }
   }
 
   return (
-    <main className="auth-page">
+    <main className="auth-page admin-auth">
       <section className="auth-card">
         <div className="auth-brand">
           <div className="auth-logo-box">B</div>
-          <h1>BorrowBox</h1>
-          <p>Sign in to your account</p>
+          <h1>BorrowBox Admin</h1>
+          <p>Sign in to the operations portal</p>
         </div>
-
-        {location.state?.registered && (
-          <div className="auth-alert success">Account created. Please log in.</div>
-        )}
 
         {msg && <div className="auth-alert error">{msg}</div>}
 
         <form className="auth-form" onSubmit={handleSubmit}>
           <label>
-            Email address
+            Admin email
             <input
               type="email"
-              placeholder="you@example.com"
+              placeholder="admin@example.com"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
@@ -58,7 +57,7 @@ export default function Login() {
             Password
             <input
               type="password"
-              placeholder="Enter your password"
+              placeholder="Enter admin password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
@@ -66,14 +65,14 @@ export default function Login() {
           </label>
 
           <button className="auth-submit" type="submit" disabled={loading}>
-            {loading ? "Logging in..." : "Login"}
+            {loading ? "Checking access..." : "Admin Login"}
           </button>
         </form>
 
         <p className="auth-switch">
-          Don&apos;t have an account?{" "}
-          <button type="button" onClick={() => navigate("/register")}>
-            Register here
+          Borrower account?{" "}
+          <button type="button" onClick={() => navigate("/login")}>
+            User login
           </button>
         </p>
       </section>

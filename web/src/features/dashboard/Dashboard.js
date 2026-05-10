@@ -1,7 +1,7 @@
 import { useEffect, useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
-import { getMe, getDashboard, logoutUser } from "../../services/api";
-import Navbar from "../../components/navbar";
+import { getMe, getDashboard, logoutUser } from "../../shared/api";
+import Navbar from "../../shared/components/Navbar";
 import "./Dashboard.css";
 
 export default function Dashboard() {
