@@ -3,8 +3,8 @@ package edu.cit.cuadero.borrowbox.service;
 import org.springframework.security.core.userdetails.*;
 import org.springframework.stereotype.Service;
 
-import edu.cit.cuadero.borrowbox.entity.User;
-import edu.cit.cuadero.borrowbox.repository.UserRepository;
+import edu.cit.cuadero.borrowbox.shared.entity.User;
+import edu.cit.cuadero.borrowbox.shared.repository.UserRepository;
 
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
