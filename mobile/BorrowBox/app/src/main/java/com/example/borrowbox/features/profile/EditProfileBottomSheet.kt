@@ -1,5 +1,6 @@
-package com.example.borrowbox.ui
+package com.example.borrowbox.features.profile
 
+import com.example.borrowbox.features.auth.LoginActivity
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,10 +10,10 @@ import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import com.example.borrowbox.R
-import com.example.borrowbox.api.ApiClient
-import com.example.borrowbox.model.MeResponse
-import com.example.borrowbox.model.UpdateProfileRequest
-import com.example.borrowbox.storage.TokenManager
+import com.example.borrowbox.shared.api.ApiClient
+import com.example.borrowbox.shared.model.MeResponse
+import com.example.borrowbox.shared.model.UpdateProfileRequest
+import com.example.borrowbox.shared.storage.TokenManager
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment

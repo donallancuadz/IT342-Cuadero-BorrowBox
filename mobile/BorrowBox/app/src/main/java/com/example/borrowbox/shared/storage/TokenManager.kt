@@ -1,4 +1,4 @@
-package com.example.borrowbox.storage
+package com.example.borrowbox.shared.storage
 
 import android.content.Context
 

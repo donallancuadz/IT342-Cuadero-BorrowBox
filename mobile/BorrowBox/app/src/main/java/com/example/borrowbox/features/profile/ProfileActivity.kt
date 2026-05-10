@@ -1,14 +1,18 @@
-package com.example.borrowbox.ui
+package com.example.borrowbox.features.profile
 
+import com.example.borrowbox.features.auth.LoginActivity
+import com.example.borrowbox.features.items.ItemsActivity
+import com.example.borrowbox.features.requests.RequestsActivity
+import com.example.borrowbox.features.dashboard.DashboardActivity
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.example.borrowbox.R
-import com.example.borrowbox.api.ApiClient
-import com.example.borrowbox.model.MeResponse
-import com.example.borrowbox.storage.TokenManager
+import com.example.borrowbox.shared.api.ApiClient
+import com.example.borrowbox.shared.model.MeResponse
+import com.example.borrowbox.shared.storage.TokenManager
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import retrofit2.Call
 import retrofit2.Callback

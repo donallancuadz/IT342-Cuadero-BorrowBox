@@ -1,4 +1,4 @@
-package com.example.borrowbox.ui.adapter
+package com.example.borrowbox.features.requests
 
 import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.borrowbox.R
-import com.example.borrowbox.model.BorrowRequestResponse
+import com.example.borrowbox.shared.model.BorrowRequestResponse
 
 class RequestsAdapter(private val items: List<BorrowRequestResponse>) :
     RecyclerView.Adapter<RequestsAdapter.ViewHolder>() {

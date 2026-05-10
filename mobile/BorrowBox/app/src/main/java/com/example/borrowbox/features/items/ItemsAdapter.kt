@@ -1,4 +1,4 @@
-package com.example.borrowbox.ui.adapter
+package com.example.borrowbox.features.items
 
 import android.view.LayoutInflater
 import android.view.View
@@ -7,7 +7,7 @@ import android.widget.Button
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.borrowbox.R
-import com.example.borrowbox.model.Item
+import com.example.borrowbox.shared.model.Item
 
 class ItemsAdapter(
     private var items: List<Item>,

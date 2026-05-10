@@ -1,16 +1,16 @@
-package com.example.borrowbox.api
+package com.example.borrowbox.shared.api
 
 import retrofit2.http.PUT
-import com.example.borrowbox.model.UpdateProfileRequest
-import com.example.borrowbox.model.BorrowRequestCreateRequest
-import com.example.borrowbox.model.BorrowRequestResponse
-import com.example.borrowbox.model.DashboardStats
-import com.example.borrowbox.model.Item
-import com.example.borrowbox.model.LoginRequest
-import com.example.borrowbox.model.LoginResponse
-import com.example.borrowbox.model.MeResponse
-import com.example.borrowbox.model.RegisterRequest
-import com.example.borrowbox.model.RegisterResponse
+import com.example.borrowbox.shared.model.UpdateProfileRequest
+import com.example.borrowbox.shared.model.BorrowRequestCreateRequest
+import com.example.borrowbox.shared.model.BorrowRequestResponse
+import com.example.borrowbox.shared.model.DashboardStats
+import com.example.borrowbox.shared.model.Item
+import com.example.borrowbox.shared.model.LoginRequest
+import com.example.borrowbox.shared.model.LoginResponse
+import com.example.borrowbox.shared.model.MeResponse
+import com.example.borrowbox.shared.model.RegisterRequest
+import com.example.borrowbox.shared.model.RegisterResponse
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.GET

@@ -1,5 +1,6 @@
-package com.example.borrowbox.ui
+package com.example.borrowbox.features.auth
 
+import com.example.borrowbox.features.dashboard.DashboardActivity
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
@@ -8,10 +9,10 @@ import android.widget.EditText
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.example.borrowbox.R
-import com.example.borrowbox.api.ApiClient
-import com.example.borrowbox.model.LoginRequest
-import com.example.borrowbox.model.LoginResponse
-import com.example.borrowbox.storage.TokenManager
+import com.example.borrowbox.shared.api.ApiClient
+import com.example.borrowbox.shared.model.LoginRequest
+import com.example.borrowbox.shared.model.LoginResponse
+import com.example.borrowbox.shared.storage.TokenManager
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response

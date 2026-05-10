@@ -1,4 +1,4 @@
-package com.example.borrowbox.ui
+package com.example.borrowbox.features.auth
 
 import android.content.Intent
 import android.os.Bundle
@@ -8,9 +8,9 @@ import android.widget.EditText
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.example.borrowbox.R
-import com.example.borrowbox.api.ApiClient
-import com.example.borrowbox.model.RegisterRequest
-import com.example.borrowbox.model.RegisterResponse
+import com.example.borrowbox.shared.api.ApiClient
+import com.example.borrowbox.shared.model.RegisterRequest
+import com.example.borrowbox.shared.model.RegisterResponse
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response

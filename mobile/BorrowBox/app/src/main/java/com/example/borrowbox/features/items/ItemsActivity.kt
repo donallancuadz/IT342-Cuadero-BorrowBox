@@ -1,5 +1,9 @@
-package com.example.borrowbox.ui
+package com.example.borrowbox.features.items
 
+import com.example.borrowbox.features.auth.LoginActivity
+import com.example.borrowbox.features.requests.RequestsActivity
+import com.example.borrowbox.features.profile.ProfileActivity
+import com.example.borrowbox.features.dashboard.DashboardActivity
 import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
@@ -12,12 +16,12 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.borrowbox.R
-import com.example.borrowbox.api.ApiClient
-import com.example.borrowbox.model.BorrowRequestCreateRequest
-import com.example.borrowbox.model.BorrowRequestResponse
-import com.example.borrowbox.model.Item
-import com.example.borrowbox.storage.TokenManager
-import com.example.borrowbox.ui.adapter.ItemsAdapter
+import com.example.borrowbox.shared.api.ApiClient
+import com.example.borrowbox.shared.model. BorrowRequestCreateRequest
+import com.example.borrowbox.shared.model.BorrowRequestResponse
+import com.example.borrowbox.shared.model.Item
+import com.example.borrowbox.shared.storage.TokenManager
+import com.example.borrowbox.features.items.ItemsAdapter
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import retrofit2.Call
 import retrofit2.Callback

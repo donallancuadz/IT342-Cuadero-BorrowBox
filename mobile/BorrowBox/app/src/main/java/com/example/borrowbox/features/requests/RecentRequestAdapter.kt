@@ -1,4 +1,4 @@
-package com.example.borrowbox.ui.adapter
+package com.example.borrowbox.features.requests
 
 import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.borrowbox.R
-import com.example.borrowbox.model.RecentRequestItem
+import com.example.borrowbox.shared.model.RecentRequestItem
 
 class RecentRequestAdapter(private val items: List<RecentRequestItem>) :
     RecyclerView.Adapter<RecentRequestAdapter.ViewHolder>() {

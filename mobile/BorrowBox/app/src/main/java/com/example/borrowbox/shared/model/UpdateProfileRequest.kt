@@ -1,4 +1,4 @@
-package com.example.borrowbox.model
+package com.example.borrowbox.shared.model
 
 data class UpdateProfileRequest(
     val fullName: String?,

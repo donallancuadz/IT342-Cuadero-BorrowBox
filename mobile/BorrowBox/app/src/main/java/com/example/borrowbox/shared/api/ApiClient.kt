@@ -1,4 +1,4 @@
-package com.example.borrowbox.api
+package com.example.borrowbox.shared.api
 
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
