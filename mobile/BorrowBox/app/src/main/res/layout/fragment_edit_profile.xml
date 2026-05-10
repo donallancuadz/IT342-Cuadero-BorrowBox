@@ -110,6 +110,29 @@
             android:hint="Leave blank if not changing"
             android:layout_marginBottom="24dp" />
 
+        <!-- Confirm New Password -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Confirm New Password"
+            android:textColor="@color/text_secondary"
+            android:textSize="13sp"
+            android:layout_marginBottom="6dp" />
+
+        <EditText
+            android:id="@+id/etConfirmNewPassword"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="@drawable/input_bg"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:textColor="@color/text_primary"
+            android:textSize="14sp"
+            android:inputType="textPassword"
+            android:autofillHints="newPassword"
+            android:hint="Repeat new password"
+            android:layout_marginBottom="24dp" />
+
         <!-- Error message -->
         <TextView
             android:id="@+id/tvError"

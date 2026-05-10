@@ -77,10 +77,6 @@ export default function Dashboard() {
             <p>Returned Items</p>
             <h2>{stats?.returnedItems ?? "—"}</h2>
           </div>
-          <div className="stat-card">
-            <p>Available Items</p>
-            <h2>{stats?.availableItems ?? "—"}</h2>
-          </div>
         </section>
 
       </main>

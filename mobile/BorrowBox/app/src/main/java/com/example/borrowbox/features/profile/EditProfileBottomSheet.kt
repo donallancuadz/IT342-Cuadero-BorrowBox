@@ -49,6 +49,7 @@ class EditProfileBottomSheet : BottomSheetDialogFragment() {
         val etFullName        = view.findViewById<EditText>(R.id.etFullName)
         val etCurrentPassword = view.findViewById<EditText>(R.id.etCurrentPassword)
         val etNewPassword     = view.findViewById<EditText>(R.id.etNewPassword)
+        val etConfirmNewPassword = view.findViewById<EditText>(R.id.etConfirmNewPassword)
         val tvError           = view.findViewById<TextView>(R.id.tvError)
         val btnSave           = view.findViewById<Button>(R.id.btnSave)
         val btnCancel         = view.findViewById<Button>(R.id.btnCancel)
@@ -70,6 +71,11 @@ class EditProfileBottomSheet : BottomSheetDialogFragment() {
             }
             if (newPass.isNotBlank() && currentPass.isBlank()) {
                 showError(tvError, "Enter your current password to set a new one.")
+                return@setOnClickListener
+            }
+            val confirmNewPass = etConfirmNewPassword.text.toString()
+            if (newPass.isNotBlank() && newPass != confirmNewPass) {
+                showError(tvError, "New passwords do not match.")
                 return@setOnClickListener
             }
 
